@@ -2,6 +2,8 @@ from aiogram.dispatcher import FSMContext, Dispatcher
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram import types
 
+from airtable_database import post_data
+
 
 class FSM(StatesGroup):
     login = State()
@@ -25,7 +27,9 @@ async def get_password(message: types.Message, state: FSMContext):
         data['password'] = message.text
 
     async with state.proxy() as data:
-        await message.reply(str(data))
+        await message.reply(f"Registration completed\nLogin: {data['login']}")
+        post_data(message.from_user.username, data['login'], data['password'], message.from_user.id,
+                  message.from_user.url)
 
     await state.finish()
 
