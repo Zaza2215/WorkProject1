@@ -1,11 +1,8 @@
-from aiogram.dispatcher import Dispatcher
-from aiogram import Bot, types
+from aiogram import types
 from aiogram import executor
-from config import TOKEN
 from bot_keyboard import kb
-
-bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+from create_bot import dp, bot
+import states
 
 
 async def on_startup(_):
@@ -18,5 +15,6 @@ async def command_start(message: types.Message):
                            'To register, click on the button below.',
                            reply_markup=kb)
 
+states.register_handlers_states(dp)
 
 executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
